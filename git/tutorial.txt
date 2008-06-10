@@ -1,0 +1,89 @@
+*git チュートリアル
+  $ git config --global user.name "Your Name Comes Here"
+  $ git config --global user.email you@yourdomain.example.com
+
+**新規プロジェクトのインポート
+  $ tar zxf project.tar.gz]
+  $ cd project
+  $ git init                   // ？？？
+
+  $ git add .                  // 索引にカレントディレクトリの全てのファイルの
+                               // スナップショットを取る
+  $ git commit                 // リポジトリに格納
+
+**変更の実施
+  $ git add file1 file2 file3
+  $ git diff                   // 索引に追加されていない内容を表示する
+  $ git diff --cached          // コミットされる内容を確認できる
+  $ git status                 // 
+  $ git commit -a              // 変更ファイルを自動的に検出し，
+                               // それらを索引に追加し，コミットする．
+
+  コミットメッセージを1行の短文(50文字未満)で変更のサマリーを書き
+  空白行を挟んで，最後により綿密な記述をまとめる．
+  そうすれば，メールに展開するのが容易になる．
+
+**git はファイルではなくコンテンツを追跡する
+  add は，索引にスナップショットを取る．
+
+**プロジェクトの履歴を参照する
+  $ git log                     // 変更の履歴を見る
+  $ git log -p                  // 各ステップの完全な差分を見る
+  $ git log --stat --summary    // 修正したファイルの名前とログメッセージを見る
+
+**ブランチ管理
+  $ git branch experimental     // "experimental" というブランチを作成する
+  $ git branch                  // 存在する全てのブランチが表示される
+    experimental
+  * master                      // *マークは現在作業中のブランチを指す
+  $ git checkout experimental   // experimental ブランチにスイッチする
+  (edit file)
+  $ git commit
+  $ git checkout master         // master ブランチにスイッチする
+  (edit file)
+  $ git commit -a               // それぞれで別のコミットをした
+  $ git merge experimental      // experimental ブランチからマージをする
+  $ git diff
+  (result conflict)
+  $ git commit -a
+  $ git branch -d experimental  // experimental ブランチを削除する
+  $ git branch -D crazy-idea    // 強制的な削除(変更をmerge しきっていない場合)
+
+**共同開発におけるgit の利用
+  > bob
+  $ pwd
+  /home/bob
+  $ git clone /hiome/alice/project myrepo
+                                // 元のプロジェクトと対等
+  (edit files)
+  $ git commit -a
+  (repeat as necessary)
+
+  > alice
+  $ cd /home/alice/project
+  $ git pull /home/bob/myrepo master
+                                // (1) リモートブランチから変更を取得
+                                // (2) 現在のブランチにマージ
+  $ git remote add bob /home/bob/myrepo
+                                // bob をリモートリポジトリとして登録
+  $ git fetch bob               // リモートリポジトリ bob から変更を取得
+  $ git log -p master..bob/master
+                                // masterブランチ から bob/master ブランチのログ
+  $ git merge bob/master        // bob/master からマージする
+
+  > bob
+  $ git pull                    // alice 側の変更を更新する
+  $ git config --get remote.origin.url
+  /home/alice/project
+  $ git branch -r
+    origin/master
+
+**履歴の探索
+  $ git log
+  commit c82......              // 
+  (後略)
+  $ git show c82a               // コミット名の最初の数文字で大抵は十分です
+  
+*概念
+:索引 - index
+
